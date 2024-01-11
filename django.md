@@ -24,7 +24,6 @@ python manage.py startapp 앱이름
     ```
  
 ### 4.2. app 하위 views.py
-
 - from django.shortcuts import render, redirect / from .models import Article 와 같이 작성하여 함수를 정의하는데 모델과 함수 사용
 - redirect로 이동하는 url 지정가능
 - 특정 pk값에 해당하는 인스턴스를 꺼내기 위해서는 함수를 정의할 때 pk도 인자로 받음
@@ -49,15 +48,25 @@ python manage.py startapp 앱이름
     <p> 예시 </p>
     {% endblock content %}
     ```
+## 6 Tag
+### 6.1. form 
+- method 방식 지정안하면 디폴트는 GET임
+- method="POST"일 경우 {% csrf_token %} 반드시 필요
+- form 태그 활용 시 주로 input 태그 중 submit 타입 사용
+- form action= ""은 어디로 보낼지 url 작성하는 자리임
+    
+    ```
+    예시)
+    <form action="{% url "hospital:update" patient.pk %}" method="POST">
+    {% csrf_token %}
+    ```
 
-### 5.1. form 
-
-### 5.2. input
+### 6.2. input
 - input 태그 안에 value = ""를 작성하여 미리 값 채워 넣어 놓수 있음 (수정시 사용 가능)
 - input 태그 안에 required 작성 시 -> 작성해야 제출 가능하게 함  
 - input 태그 안에 autocomplete ="off" 작성 시 -> 자동완성 안함 (이전에 작성한 내용 안보이게)
   
-### 5.3. textarea
+### 6.3. textarea
 - textarea 태그를 통해 엔터를 입력한 경우 화면에서 br로 표시
 - | linebreaksbr -> 엔터친 지점에 들어가서 엔터 나오게 함! 원래는 html에서는 한 칸 띄어쓰기만 됨
   ```
@@ -67,7 +76,7 @@ python manage.py startapp 앱이름
 - textarea는 input과 다르게 태그 사이에 미리 채워 넣을 값 쓸 수 있음
 - textarea는 내용 작성하는 위치 반영 -> 엔터치면 맨 앞과 스페이스만큼 띄어지므로 태그 양옆에 이어붙여서 쓰기
 
-### 5.4. button
+### 6.4. button
 - a 태그 안에 button 태그 넣기! 아님 밑줄 나옴
 - button 클릭 후 메시지 뜨게 하려면 onclick="return confirm('') 작성 -> javascript 섞어쓴 것
   
@@ -84,16 +93,38 @@ python manage.py startapp 앱이름
     <a href="{% url "board:index" %}">Home</a>    
     ``` 
     
-## 6. 서버 실행
+## . 서버 실행
 - python manage.py runserver 명령으로 실행
 - http://127.0.0.1:8000/ (localhost:8000 -> 8000은 포트 넘버)로 접속하여 개발 서버가 실행 중인지 확인
 
 
-## 7. 모델 정의 및 마이그레이션
+## . 모델 정의 및 마이그레이션
 - 모델은 models.py 파일에서 정의하고, python manage.py makemigrations와 python manage.py migrate 명령어로 데이터베이스에 적용
 - 특정 model 확인하고 싶을 시 뒤에 app이름 붙이기
 - Class 정의 후 models.CharField(),  models.IntegerField() 등 필드 타입을 사용하여 모델 정의 (참고. text.field()는 내용 길이 무제한으로 작성가능)
   
+## 폼 정의
+- 자동 생성되지 않아 수동으로 앱 하위에 forms.py 파일 생성필요
+- 사용자 입력을 처리하는 데 도움이 되는 폼(Form) 클래스를 정의
+- HTML form tag 요소를 생성하고, 데이터 저장, HTML 렌더링 등을 쉽게 처리할 수 있도록 도와줌
+- 입력 유효성 검사(validation): views.py에서 `if form.is_valid()`를 통해 유효성 검사
+- 데이터 저장: 예로 views.py에 `form = ArticleForm(request.POST)`통해 사용자가 작성하여 넘어온 데이터 통채로 form에 입력 및 `article = form.save()`로 article instance 저장
+- `form = ArticleForm(instance=article)`로 이미 받아놓은 데이터 수정하기 위해 form 채워넣기
+- `form = ArticleForm(request.POST, instance=article)`와 같이 작성하여 사용자의 데이터와 기존 article을 같이 활용가능
+- html 파일에서는 `{{form}}`으로 forms.py에서 지정한 폼 불러올 수 있음
+  
+    ```
+    예시)
+    class ArticleForm(forms.ModelForm):
+        title = forms.CharField(min_length=2, max_length=100)
+        content = forms.CharField(
+            min_length=3, widget=forms.Textarea(attrs={'class':'my-class'}))
+
+        class Meta:    
+            model = Article
+            fields = '__all__'
+    ```
+
 
 ## ORM (Object-Relational Mapping)
 - 모델을 사용하여 데이터베이스와 상호 작용. QuerySet을 사용하여 데이터 검색 및 필터링
