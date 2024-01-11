@@ -16,7 +16,7 @@ python manage.py startapp 앱이름
 - 자동 생성되지 않아 수동으로 파일 생성 필요
 - from django.urls import path/ from . import views 작성하여 views.py와 연결
 - url 쓸 일이 있으면 '<app_name>:<name>'로 작성하여 추후 변경 시 용이하게 함 
-- urlpatterns = [] 의 세번째 인자에 name 지정  
+- urlpatterns = [ ] 의 세번째 인자에 name 지정  
     
     ```
     var_routing 예시) 
@@ -86,24 +86,18 @@ python manage.py startapp 앱이름
     <button onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
     </a>
     ``` 
-### 5.5 a href
+### 6.5 a href
 - app_name 사용시 url 탭해서 "" 안에 쓰기
     ```
     예시)
     <a href="{% url "board:index" %}">Home</a>    
     ``` 
-    
-## . 서버 실행
-- python manage.py runserver 명령으로 실행
-- http://127.0.0.1:8000/ (localhost:8000 -> 8000은 포트 넘버)로 접속하여 개발 서버가 실행 중인지 확인
-
-
-## . 모델 정의 및 마이그레이션
+## 7. 모델 정의 및 마이그레이션
 - 모델은 models.py 파일에서 정의하고, python manage.py makemigrations와 python manage.py migrate 명령어로 데이터베이스에 적용
 - 특정 model 확인하고 싶을 시 뒤에 app이름 붙이기
 - Class 정의 후 models.CharField(),  models.IntegerField() 등 필드 타입을 사용하여 모델 정의 (참고. text.field()는 내용 길이 무제한으로 작성가능)
   
-## 폼 정의
+## 8. 폼 정의
 - 자동 생성되지 않아 수동으로 앱 하위에 forms.py 파일 생성필요
 - 사용자 입력을 처리하는 데 도움이 되는 폼(Form) 클래스를 정의
 - HTML form tag 요소를 생성하고, 데이터 저장, HTML 렌더링 등을 쉽게 처리할 수 있도록 도와줌
@@ -126,8 +120,11 @@ python manage.py startapp 앱이름
     ```
 
 
-## ORM (Object-Relational Mapping)
+## 9. ORM (Object-Relational Mapping)
 - 모델을 사용하여 데이터베이스와 상호 작용. QuerySet을 사용하여 데이터 검색 및 필터링
 - filter(), exclude(), get() 등 다양한 쿼리 메서드 활용
 
 
+## 10. 서버 실행
+- python manage.py runserver 명령으로 실행
+- http://127.0.0.1:8000/ (localhost:8000 -> 8000은 포트 넘버)로 접속하여 개발 서버가 실행 중인지 확인
